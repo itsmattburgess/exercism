@@ -14,18 +14,22 @@ const (
 	whatever = "Whatever."
 )
 
+type Remark struct {
+	remark string
+}
+
 // Speak with the teenager and return their response
 func Hey(remark string) string {
-	remark = strings.TrimSpace(remark)
+	r := Remark{strings.TrimSpace(remark)}
 
 	switch {
-	case isEmpty(remark):
+	case r.isEmpty():
 		return fine
-	case isShouting(remark) && isQuestion(remark):
+	case r.isShouting() && r.isQuestion():
 		return calmdown
-	case isShouting(remark):
+	case r.isShouting():
 		return chillout
-	case isQuestion(remark):
+	case r.isQuestion():
 		return sure
 	default:
 		return whatever
@@ -33,13 +37,13 @@ func Hey(remark string) string {
 }
 
 // Is the string blank?
-func isEmpty(remark string) bool {
-	return remark == ""
+func (r Remark) isEmpty() bool {
+	return r.remark == ""
 }
 
 // Does the string contain letters
-func containsLetters(remark string) bool {
-	for _, letter := range remark {
+func (r Remark) containsLetters() bool {
+	for _, letter := range r.remark {
 		if unicode.IsLetter(letter) {
 			return true
 		}
@@ -49,11 +53,11 @@ func containsLetters(remark string) bool {
 }
 
 // Is the string all in caps?
-func isShouting(remark string) bool {
-	return containsLetters(remark) && strings.ToUpper(remark) == remark
+func (r Remark) isShouting() bool {
+	return r.containsLetters() && strings.ToUpper(r.remark) == r.remark
 }
 
 // Does the string end with a question mark?
-func isQuestion(remark string) bool {
-	return strings.HasSuffix(remark, "?")
+func (r Remark) isQuestion() bool {
+	return strings.HasSuffix(r.remark, "?")
 }
